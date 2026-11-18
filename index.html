@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Dar Tafouch — Studios à Casablanca</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --primary:#C2410C;      /* terracotta */
+    --primary-soft:#FFF1E8;
+    --dark:#1C1917;
+    --text:#292524;
+    --muted:#78716C;
+    --border:#E7E5E4;
+    --bg:#FFFFFF;
+    --radius:22px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Plus Jakarta Sans',sans-serif;color:var(--text);background:var(--bg);padding-bottom:120px}
+  a{color:inherit;text-decoration:none}
+  .container{max-width:1200px;margin:0 auto;padding:0 20px}
+
+  /* ---------- HEADER ---------- */
+  header{display:flex;justify-content:space-between;align-items:center;padding:18px 20px;max-width:1200px;margin:0 auto}
+  .logo{font-weight:800;font-size:22px;letter-spacing:-.5px}
+  .logo span{color:var(--primary)}
+  .btn{background:var(--dark);color:#fff;border:none;padding:11px 20px;border-radius:999px;font-weight:600;cursor:pointer;font-family:inherit}
+  .btn.primary{background:var(--primary)}
+
+  /* ---------- HERO ---------- */
+  .hero{text-align:center;padding:50px 20px 30px}
+  .tagline{color:var(--primary);font-weight:700;letter-spacing:1px;font-size:14px}
+  .hero h1{font-size:clamp(28px,5vw,46px);margin:14px 0 26px;letter-spacing:-1px}
+  .search{max-width:640px;margin:0 auto;display:flex;align-items:center;gap:10px;border:1px solid var(--border);border-radius:999px;padding:8px 8px 8px 24px;box-shadow:0 8px 30px rgba(0,0,0,.07)}
+  .search select,.search input{border:none;outline:none;font-family:inherit;font-size:15px;flex:1;background:transparent;color:var(--text)}
+  .search .sep{width:1px;height:26px;background:var(--border)}
+
+  /* ---------- SERVICES ---------- */
+  .services{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;border:1px solid var(--border);border-radius:var(--radius);padding:18px;max-width:1000px;margin:30px auto 0}
+  .service{display:flex;flex-direction:column;align-items:center;gap:10px;cursor:pointer;padding:8px;border-radius:16px;transition:.2s}
+  .service:hover{background:#FAFAF9}
+  .service .ico{width:68px;height:68px;border-radius:20px;background:var(--primary-soft);display:grid;place-items:center;font-size:28px}
+  .service.active .ico{background:var(--primary);}
+  .service.active p{color:var(--primary);font-weight:700}
+
+  /* ---------- SECTIONS ---------- */
+  section{margin-top:56px}
+  .kicker{color:var(--primary);font-weight:700;font-size:13px;letter-spacing:1px}
+  .title-row{display:flex;justify-content:space-between;align-items:end;margin:6px 0 20px}
+  .title-row h2{font-size:26px;letter-spacing:-.5px}
+  .arrows button{width:40px;height:40px;border-radius:50%;border:1px solid var(--border);background:#fff;cursor:pointer;font-size:18px;margin-left:6px}
+
+  .carousel{display:flex;gap:18px;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:10px;scrollbar-width:none}
+  .carousel::-webkit-scrollbar{display:none}
+  .card{min-width:260px;max-width:260px;scroll-snap-align:start;cursor:pointer}
+  .card .img{position:relative;height:260px;border-radius:var(--radius);overflow:hidden;box-shadow:0 6px 20px rgba(0,0,0,.08)}
+  .card img{width:100%;height:100%;object-fit:cover;transition:.4s}
+  .card:hover img{transform:scale(1.05)}
+  .badge{position:absolute;top:12px;left:12px;background:#fff;padding:5px 11px;border-radius:999px;font-size:12px;font-weight:700}
+  .fav{position:absolute;top:12px;right:12px;background:rgba(255,255,255,.9);width:34px;height:34px;border-radius:50%;display:grid;place-items:center;border:none;cursor:pointer;font-size:16px}
+  .card h3{font-size:16px;margin-top:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .card .loc{color:var(--muted);font-size:14px;margin-top:3px}
+  .card .price{margin-top:6px;font-size:15px}
+  .card .price b{font-size:16px}
+
+  /* ---------- FORMULES ---------- */
+  .plans{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+  .plan{border:1px solid var(--border);border-radius:var(--radius);padding:26px}
+  .plan.hot{border:2px solid var(--primary);background:var(--primary-soft)}
+  .plan h3{font-size:18px}
+  .plan .p{font-size:32px;font-weight:800;margin:10px 0}
+  .plan .p small{font-size:14px;color:var(--muted);font-weight:500}
+  .plan ul{list-style:none;color:var(--muted);line-height:2;font-size:14px;margin-bottom:18px}
+
+  /* ---------- FOOTER ---------- */
+  footer{margin-top:70px;border-top:1px solid var(--border);padding:30px 20px;text-align:center;color:var(--muted);font-size:14px}
+
+  /* ---------- BOTTOM NAV ---------- */
+  .bottom-nav{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:rgba(28,25,23,.92);backdrop-filter:blur(10px);border-radius:24px;display:flex;gap:6px;padding:10px 14px;z-index:50}
+  .bottom-nav a{width:58px;height:48px;display:grid;place-items:center;border-radius:16px;color:#fff;font-size:20px;transition:.2s}
+  .bottom-nav a.active,.bottom-nav a:hover{background:rgba(255,255,255,.12);color:#FDBA74}
+
+  /* ---------- CONTACT FLOTTANT ---------- */
+  .float{position:fixed;right:20px;bottom:110px;display:flex;flex-direction:column;gap:10px;z-index:50}
+  .float a{width:54px;height:54px;border-radius:50%;display:grid;place-items:center;font-size:22px;box-shadow:0 8px 24px rgba(0,0,0,.18)}
+  .float .wa{background:#25D366;color:#fff}
+  .float .tel{background:var(--dark);color:#fff}
+
+  /* ---------- MODAL ---------- */
+  .modal{position:fixed;inset:0;background:rgba(0,0,0,.5);display:none;align-items:center;justify-content:center;z-index:100;padding:20px}
+  .modal.open{display:flex}
+  .modal-box{background:#fff;border-radius:26px;max-width:520px;width:100%;overflow:hidden;max-height:90vh;overflow-y:auto}
+  .modal-box img{width:100%;height:260px;object-fit:cover}
+  .modal-body{padding:22px}
+  .modal-body h3{font-size:22px}
+  .modal-body .loc{color:var(--muted);margin:4px 0 14px}
+  .tabs{display:flex;gap:8px;margin:14px 0}
+  .tabs button{flex:1;padding:12px;border-radius:14px;border:1px solid var(--border);background:#fff;font-family:inherit;font-weight:600;cursor:pointer}
+  .tabs button.on{border-color:var(--primary);background:var(--primary-soft);color:var(--primary)}
+  .field{display:flex;flex-direction:column;gap:6px;margin-bottom:12px;font-size:14px;font-weight:600}
+  .field input{padding:12px;border:1px solid var(--border);border-radius:12px;font-family:inherit;font-size:15px}
+  .total{display:flex;justify-content:space-between;font-size:18px;font-weight:800;margin:16px 0}
+  .close{position:absolute;margin:14px;width:38px;height:38px;border-radius:50%;border:none;background:#fff;cursor:pointer;font-size:18px}
+
+  @media(max-width:760px){
+    .services{grid-template-columns:repeat(2,1fr)}
+    .plans{grid-template-columns:1fr}
+    .search{flex-direction:column;border-radius:22px;padding:14px}
+    .search .sep{display:none}
+    .search .btn{width:100%}
+    .card{min-width:220px;max-width:220px}
+    .card .img{height:220px}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">Dar<span>Tafouch</span></div>
+  <a class="btn" href="#formules">Réserver</a>
+</header>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="tagline">STUDIOS · JOURNÉE · DEMI-JOURNÉE · NUIT</div>
+  <h1>Votre studio à Casablanca,<br>quand vous voulez.</h1>
+
+  <div class="search">
+    <select id="fQuartier">
+      <option value="">📍 Tous les quartiers</option>
+    </select>
+    <div class="sep"></div>
+    <select id="fFormule">
+      <option value="">⏱️ Toutes les formules</option>
+      <option value="demi">Demi-journée</option>
+      <option value="jour">Journée</option>
+      <option value="nuit">Nuit</option>
+    </select>
+    <button class="btn primary" onclick="render()">Rechercher</button>
+  </div>
+
+  <div class="services" id="services">
+    <div class="service active" data-cat=""><div class="ico">🏠</div><p>Tous</p></div>
+    <div class="service" data-cat="studio"><div class="ico">🛋️</div><p>Studios</p></div>
+    <div class="service" data-cat="appart"><div class="ico">🏢</div><p>Appartements</p></div>
+    <div class="service" data-cat="pro"><div class="ico">💼</div><p>Pro / Shooting</p></div>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- LIEUX -->
+  <section>
+    <div class="kicker">DÉCOUVREZ</div>
+    <div class="title-row">
+      <h2>Nos studios disponibles</h2>
+      <div class="arrows">
+        <button onclick="scrollC(-1)">‹</button>
+        <button onclick="scrollC(1)">›</button>
+      </div>
+    </div>
+    <div class="carousel" id="carousel"></div>
+  </section>
+
+  <!-- FORMULES -->
+  <section id="formules">
+    <div class="kicker">TARIFS</div>
+    <div class="title-row"><h2>Choisissez votre formule</h2></div>
+    <div class="plans">
+      <div class="plan">
+        <h3>Demi-journée</h3>
+        <div class="p">dès 250 <small>DH / 5h</small></div>
+        <ul><li>✓ Matin ou après-midi</li><li>✓ Wi-Fi & clim</li><li>✓ Idéal pause / rendez-vous pro</li></ul>
+        <a class="btn" href="#" onclick="return waGeneric('demi-journée')">Réserver</a>
+      </div>
+      <div class="plan hot">
+        <h3>Journée ⭐</h3>
+        <div class="p">dès 400 <small>DH / 10h-20h</small></div>
+        <ul><li>✓ Le plus demandé</li><li>✓ Cuisine équipée</li><li>✓ Ménage inclus</li></ul>
+        <a class="btn primary" href="#" onclick="return waGeneric('journée')">Réserver</a>
+      </div>
+      <div class="plan">
+        <h3>Nuit</h3>
+        <div class="p">dès 500 <small>DH / nuit</small></div>
+        <ul><li>✓ Check-in 15h</li><li>✓ Linge fourni</li><li>✓ Résidence sécurisée</li></ul>
+        <a class="btn" href="#" onclick="return waGeneric('nuit')">Réserver</a>
+      </div>
+    </div>
+  </section>
+</div>
+
+<footer>
+  © 2026 Dar Tafouch — Casablanca · <a href="https://facebook.com" target="_blank">Facebook</a> · <a href="#" target="_blank">Instagram</a> · <a href="#" target="_blank">TikTok</a>
+</footer>
+
+<!-- CONTACT FLOTTANT -->
+<div class="float">
+  <a class="wa" href="#" onclick="return waGeneric('')" title="WhatsApp">💬</a>
+  <a class="tel" href="tel:+212608489738" title="Appeler">📞</a>
+</div>
+
+<!-- NAV BAS -->
+<nav class="bottom-nav">
+  <a href="#" class="active">🏠</a>
+  <a href="#formules">📅</a>
+  <a href="#" onclick="document.getElementById('fQuartier').focus();return false">🔍</a>
+  <a href="#" onclick="return waGeneric('')">💬</a>
+</nav>
+
+<!-- MODAL RÉSERVATION -->
+<div class="modal" id="modal" onclick="if(event.target===this)closeM()">
+  <div class="modal-box">
+    <button class="close" onclick="closeM()">✕</button>
+    <img id="mImg" src="" alt="">
+    <div class="modal-body">
+      <h3 id="mTitle"></h3>
+      <div class="loc" id="mLoc"></div>
+      <div class="tabs" id="mTabs"></div>
+      <div class="field">Date<input type="date" id="mDate"></div>
+      <div class="field">Nombre (jours / nuits / créneaux)<input type="number" id="mQty" value="1" min="1"></div>
+      <div class="total"><span>Total</span><span id="mTotal">0 DH</span></div>
+      <button class="btn primary" style="width:100%;padding:15px" onclick="sendWA()">Réserver sur WhatsApp</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ====== CONFIG — modifie ici ====== */
+const WHATSAPP = "212608489738"; // ton numéro sans le +
+
+const studios = [
+  { id:1, titre:"Studio cosy France Ville", quartier:"France Ville", cat:"studio",
+    img:"https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=800",
+    prix:{demi:250, jour:400, nuit:500}, badge:"Coup de cœur" },
+  { id:2, titre:"Studio moderne Maârif", quartier:"Maârif", cat:"studio",
+    img:"https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=800",
+    prix:{demi:300, jour:450, nuit:550} },
+  { id:3, titre:"Appartement lumineux Gauthier", quartier:"Gauthier", cat:"appart",
+    img:"https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=800",
+    prix:{jour:600, nuit:750}, badge:"Nouveau" },
+  { id:4, titre:"Studio shooting & réunions", quartier:"Racine", cat:"pro",
+    img:"https://images.unsplash.com/photo-1497366216548-37526070297c?w=800",
+    prix:{demi:350, jour:600} },
+  { id:5, titre:"Studio calme Bourgogne", quartier:"Bourgogne", cat:"studio",
+    img:"https://images.unsplash.com/photo-1554995207-c18c203602cb?w=800",
+    prix:{demi:220, jour:380, nuit:480} },
+  { id:6, titre:"Appartement familial Ain Diab", quartier:"Ain Diab", cat:"appart",
+    img:"https://images.unsplash.com/photo-1493809842364-78817add7ffb?w=800",
+    prix:{jour:700, nuit:900} },
+];
+/* ================================== */
+
+const labels = {demi:"Demi-journée", jour:"Journée", nuit:"Nuit"};
+let currentCat = "", current = null, currentFormule = null;
+
+// remplir les quartiers
+const fQ = document.getElementById("fQuartier");
+[...new Set(studios.map(s=>s.quartier))].forEach(q=>fQ.innerHTML+=`<option>${q}</option>`);
+
+function render(){
+  const q = fQ.value, f = document.getElementById("fFormule").value;
+  const list = studios.filter(s =>
+    (!q || s.quartier===q) && (!f || s.prix[f]) && (!currentCat || s.cat===currentCat));
+  const c = document.getElementById("carousel");
+  c.innerHTML = list.length ? list.map(s=>{
+    const min = Math.min(...Object.values(s.prix));
+    return `<div class="card" onclick="openM(${s.id})">
+      <div class="img">
+        <img src="${s.img}" alt="${s.titre}" loading="lazy">
+        ${s.badge?`<span class="badge">${s.badge}</span>`:""}
+        <button class="fav" onclick="event.stopPropagation();this.textContent=this.textContent==='♡'?'❤️':'♡'">♡</button>
+      </div>
+      <h3>${s.titre}</h3>
+      <div class="loc">📍 ${s.quartier}, Casablanca</div>
+      <div class="price">dès <b>${min} DH</b></div>
+    </div>`}).join("") : `<p style="color:var(--muted)">Aucun studio ne correspond à votre recherche.</p>`;
+}
+
+document.querySelectorAll(".service").forEach(el=>el.onclick=()=>{
+  document.querySelectorAll(".service").forEach(x=>x.classList.remove("active"));
+  el.classList.add("active"); currentCat = el.dataset.cat; render();
+});
+
+function scrollC(d){ document.getElementById("carousel").scrollBy({left:d*300,behavior:"smooth"}); }
+
+function openM(id){
+  current = studios.find(s=>s.id===id);
+  currentFormule = Object.keys(current.prix)[0];
+  mImg.src = current.img; mTitle.textContent = current.titre;
+  mLoc.textContent = "📍 " + current.quartier + ", Casablanca";
+  mDate.value = new Date().toISOString().slice(0,10);
+  mQty.value = 1;
+  drawTabs(); calc();
+  modal.classList.add("open");
+}
+function closeM(){ modal.classList.remove("open"); }
+function drawTabs(){
+  mTabs.innerHTML = Object.entries(current.prix).map(([k,v])=>
+    `<button class="${k===currentFormule?'on':''}" onclick="currentFormule='${k}';drawTabs();calc()">${labels[k]}<br><small>${v} DH</small></button>`).join("");
+}
+function calc(){ mTotal.textContent = (current.prix[currentFormule] * (+mQty.value||1)) + " DH"; }
+mQty.oninput = calc;
+
+function sendWA(){
+  const msg = `Bonjour Dar Tafouch 👋\nJe souhaite réserver :\n🏠 ${current.titre}\n⏱️ ${labels[currentFormule]} x${mQty.value}\n📅 ${mDate.value}\n💰 Total : ${mTotal.textContent}`;
+  window.open(`https://wa.me/${WHATSAPP}?text=${encodeURIComponent(msg)}`,"_blank");
+}
+function waGeneric(f){
+  const msg = f ? `Bonjour Dar Tafouch, je souhaite réserver un studio en formule ${f}.` : "Bonjour Dar Tafouch, j'ai une question.";
+  window.open(`https://wa.me/${WHATSAPP}?text=${encodeURIComponent(msg)}`,"_blank");
+  return false;
+}
+
+render();
+</script>
+</body>
+</html>
