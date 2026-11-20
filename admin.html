@@ -264,15 +264,33 @@ function parseMaps(){
 const numOrNull = id => { const v=$(id).value.trim().replace(",","."); return v===""||isNaN(+v) ? null : +v; };
 const intOrNull = id => { const v=numOrNull(id); return v===null ? null : Math.round(v); };
 
-async function uploadFiles(){
+// Réduit la photo (max 1600px, JPEG ~82%) pour un envoi rapide
+async function compress(file){
+  if(!file.type.startsWith("image/")) return file;
+  try{
+    const bmp = await createImageBitmap(file);
+    const k = Math.min(1, 1600/Math.max(bmp.width,bmp.height));
+    const c = document.createElement("canvas");
+    c.width = Math.round(bmp.width*k); c.height = Math.round(bmp.height*k);
+    c.getContext("2d").drawImage(bmp,0,0,c.width,c.height);
+    const blob = await new Promise(r=>c.toBlob(r,"image/jpeg",0.82));
+    return blob && blob.size < file.size ? blob : file;
+  }catch(e){ return file; }
+}
+const withTimeout = (p,ms,label)=>Promise.race([p,new Promise((_,rej)=>setTimeout(()=>rej(new Error(label+" : délai dépassé, vérifie ta connexion")),ms))]);
+
+async function uploadFiles(msg){
   const files = [...$("fFiles").files];
-  for(const f of files){
-    const ext = (f.name.split(".").pop()||"jpg").toLowerCase().replace(/[^a-z0-9]/g,"");
-    const path = `${Date.now()}-${Math.random().toString(36).slice(2,8)}.${ext}`;
-    const {error} = await sb.storage.from("studios").upload(path, f, {contentType:f.type, cacheControl:"31536000"});
+  let done = 0;
+  const urls = await Promise.all(files.map(async f=>{
+    const blob = await compress(f);
+    const path = `${Date.now()}-${Math.random().toString(36).slice(2,8)}.jpg`;
+    const {error} = await withTimeout(sb.storage.from("studios").upload(path, blob, {contentType:"image/jpeg", cacheControl:"31536000"}), 60000, "Envoi photo");
     if(error) throw error;
-    photos.push(sb.storage.from("studios").getPublicUrl(path).data.publicUrl);
-  }
+    msg.textContent = `Photos envoyées ${++done}/${files.length}…`;
+    return sb.storage.from("studios").getPublicUrl(path).data.publicUrl;
+  }));
+  photos.push(...urls);
 }
 async function saveStudio(e){
   e.preventDefault(); const msg=$("fMsg"); msg.className="msg"; msg.textContent="";
@@ -280,7 +298,8 @@ async function saveStudio(e){
   if(!pd && !pj && !pn){ msg.className="msg err"; msg.textContent="Mets au moins un prix."; return; }
   $("fSave").disabled=true; msg.textContent="Enregistrement…";
   try{
-    await uploadFiles();
+    await uploadFiles(msg);
+    $("fFiles").value=""; msg.textContent="Enregistrement…";
     const row = {
       titre:$("fTitre").value.trim(), cat:$("fCat").value, quartier:$("fQuartier").value.trim(),
       etage:$("fEtage").value.trim()||null, capacite:$("fCap").value.trim()||null,
@@ -293,7 +312,7 @@ async function saveStudio(e){
       img:photos[0]||null, imgs:photos.slice(1)
     };
     const q = editing ? sb.from("studios").update(row).eq("id",editing.id) : sb.from("studios").insert(row);
-    const {error} = await q; if(error) throw error;
+    const {error} = await withTimeout(q, 30000, "Enregistrement"); if(error) throw error;
     closeModals(); toast("Studio enregistré ✓"); await refresh();
   }catch(err){ msg.className="msg err"; msg.textContent="Erreur : "+(err.message||err); }
   $("fSave").disabled=false;
