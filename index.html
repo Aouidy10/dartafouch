@@ -25,6 +25,7 @@
   header{display:flex;justify-content:space-between;align-items:center;padding:18px 20px;max-width:1200px;margin:0 auto}
   .logo{font-weight:800;font-size:22px;letter-spacing:-.5px}
   .logo span{color:var(--primary)}
+  .logo img{height:64px;width:auto;display:block}
   .btn{background:var(--dark);color:#fff;border:none;padding:11px 20px;border-radius:999px;font-weight:600;cursor:pointer;font-family:inherit}
   .btn.primary{background:var(--primary)}
 
@@ -103,6 +104,67 @@
   .total{display:flex;justify-content:space-between;font-size:18px;font-weight:800;margin:16px 0}
   .close{position:absolute;margin:14px;width:38px;height:38px;border-radius:50%;border:none;background:#fff;cursor:pointer;font-size:18px}
 
+  /* ---------- DÉTAIL STUDIO ---------- */
+  .modal-box{max-width:560px}
+  .close{position:sticky;top:12px;display:block;margin:12px 12px -50px auto;z-index:2;box-shadow:0 2px 8px rgba(0,0,0,.2)}
+  .thumbs{display:flex;gap:6px;padding:8px 22px 0;overflow-x:auto}
+  .thumbs img{width:64px;height:48px;border-radius:10px;cursor:pointer;opacity:.55;flex:none;object-fit:cover}
+  .thumbs img.on{opacity:1;outline:2px solid var(--primary)}
+  .desc{color:var(--muted);font-size:14px;line-height:1.6;margin-bottom:12px}
+  .chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:6px}
+  .chip{background:var(--primary-soft);color:var(--primary);font-size:12px;font-weight:600;padding:5px 10px;border-radius:999px}
+  .sub{font-size:14px;font-weight:700;margin:16px 0 8px}
+  .cal{border:1px solid var(--border);border-radius:16px;padding:12px;margin-bottom:12px}
+  .cal-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;font-weight:700;text-transform:capitalize}
+  .cal-head button{width:32px;height:32px;border-radius:50%;border:1px solid var(--border);background:#fff;cursor:pointer;font-size:16px}
+  .cal-head button:disabled{opacity:.3;cursor:default}
+  .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;text-align:center}
+  .cal-grid .w{font-size:11px;color:var(--muted);font-weight:600;padding:4px 0}
+  .cal-grid button{aspect-ratio:1;border:none;border-radius:10px;background:#fff;font-family:inherit;font-size:13px;font-weight:600;cursor:pointer;color:var(--text)}
+  .cal-grid button:hover:not(:disabled){background:var(--primary-soft)}
+  .cal-grid button.busy{background:#FEE2E2;color:#B91C1C;text-decoration:line-through;cursor:not-allowed}
+  .cal-grid button.past{color:#D6D3D1;cursor:default}
+  .cal-grid button.sel{background:var(--primary-soft);color:var(--primary);outline:1px solid var(--primary)}
+  .cal-grid button.start{background:var(--primary);color:#fff}
+  .legend{display:flex;gap:14px;font-size:12px;color:var(--muted);margin-top:8px}
+  .legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:5px}
+  .warn{color:#B91C1C;font-size:13px;font-weight:600;margin:6px 0 0;display:none}
+  .btn:disabled{opacity:.45;cursor:not-allowed}
+
+  /* ---------- GESTION ---------- */
+  .g-hero{display:grid;grid-template-columns:1fr 1fr;gap:30px;align-items:center}
+  .g-txt h2{font-size:clamp(24px,4vw,34px);letter-spacing:-.5px;margin:8px 0 12px;line-height:1.2}
+  .g-txt p{color:var(--muted);line-height:1.6;margin-bottom:18px}
+  .g-txt .slogan{font-style:italic;margin:16px 0 0;color:var(--primary);font-weight:600}
+  .g-hero img{width:100%;height:340px;object-fit:cover;border-radius:var(--radius);box-shadow:0 10px 30px rgba(0,0,0,.12)}
+  .g-why{text-align:center;margin-top:56px}
+  .g-why h2{font-size:26px;letter-spacing:-.5px}
+  .g-sub{color:var(--muted);max-width:640px;margin:10px auto 26px;line-height:1.6}
+  .g-feat{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+  .g-feat h3{font-size:16px;margin:10px 0 6px}.g-feat p{color:var(--muted);font-size:14px;line-height:1.6}
+  .g-ico{width:56px;height:56px;border-radius:18px;background:var(--primary-soft);display:grid;place-items:center;font-size:24px;margin:0 auto}
+  .g-services{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:26px}
+  .g-services span{border:1px solid var(--border);border-radius:999px;padding:8px 14px;font-size:13px;font-weight:600}
+  .g-est{display:grid;grid-template-columns:1fr 1fr;gap:30px;align-items:center;background:#F5F5F4;border-radius:28px;padding:36px;margin-top:56px}
+  .g-est-txt h2{font-size:26px;letter-spacing:-.5px;margin:8px 0 12px}.g-est-txt p{color:var(--muted);line-height:1.6}
+  .g-card{background:#fff;border:1px solid var(--border);border-radius:20px;padding:22px;box-shadow:0 10px 30px rgba(0,0,0,.08)}
+  .g-card h3{font-size:17px;margin-bottom:14px}
+  .g-in{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
+  .g-in label{display:flex;flex-direction:column;gap:5px;font-size:12px;font-weight:600;color:var(--muted)}
+  .g-in input{padding:11px;border:1px solid var(--border);border-radius:12px;font-family:inherit;font-size:15px;color:var(--text);width:100%}
+  #eRange{width:100%;accent-color:var(--primary);margin-bottom:12px}
+  .g-line{display:flex;justify-content:space-between;font-size:13px;color:var(--muted);padding:5px 0}
+  .g-line b{color:var(--text)}
+  .g-net{display:flex;justify-content:space-between;align-items:center;background:var(--primary-soft);border-radius:12px;padding:14px;margin:10px 0;font-weight:700}
+  .g-net b{font-size:20px;color:var(--primary)}
+  .g-card small{display:block;color:var(--muted);font-size:11px;line-height:1.5}
+  @media(max-width:760px){
+    .g-hero,.g-est{grid-template-columns:1fr}
+    .g-hero img{height:240px;order:-1}
+    .g-feat{grid-template-columns:1fr}
+    .g-est{padding:22px}
+  }
+
   @media(max-width:760px){
     .services{grid-template-columns:repeat(2,1fr)}
     .plans{grid-template-columns:1fr}
@@ -117,7 +179,7 @@
 <body>
 
 <header>
-  <div class="logo">Dar<span>Tafouch</span></div>
+  <a class="logo" href="#" aria-label="Dar Tafouch"><img src="logo.png" alt="Dar Tafouch" onerror="this.parentNode.innerHTML='Dar<span>Tafouch</span>'"></a>
   <a class="btn" href="#formules">Réserver</a>
 </header>
 
@@ -144,7 +206,7 @@
     <div class="service active" data-cat=""><div class="ico">🏠</div><p>Tous</p></div>
     <div class="service" data-cat="studio"><div class="ico">🛋️</div><p>Studios</p></div>
     <div class="service" data-cat="appart"><div class="ico">🏢</div><p>Appartements</p></div>
-    <div class="service" data-cat="pro"><div class="ico">💼</div><p>Pro / Shooting</p></div>
+    <div class="service" id="svcGestion"><div class="ico">🔑</div><p>Gestion</p></div>
   </div>
 </div>
 
@@ -161,6 +223,55 @@
       </div>
     </div>
     <div class="carousel" id="carousel"></div>
+  </section>
+
+  <!-- GESTION / CONCIERGERIE -->
+  <section id="gestion">
+    <div class="g-hero">
+      <div class="g-txt">
+        <div class="kicker">CONCIERGERIE & GESTION LOCATIVE À CASABLANCA</div>
+        <h2>Gestion Airbnb &amp; Conciergerie à Casablanca</h2>
+        <p>Confiez-nous la gestion de votre location saisonnière : réservations, accueil des voyageurs, ménage et suivi de votre logement.</p>
+        <a class="btn" href="#estimation">Estimer mes revenus</a>
+        <p class="slogan">Votre bien, notre engagement.</p>
+      </div>
+      <img src="https://images.unsplash.com/photo-1540518614846-7eded433c457?w=900" alt="Logement géré par Dar Tafouch" loading="lazy">
+    </div>
+
+    <div class="g-why">
+      <h2>Pourquoi choisir Dar Tafouch pour gérer votre logement ?</h2>
+      <p class="g-sub">Nous vous accompagnons de A à Z : réservations, accueil des voyageurs, ménage et suivi. Vous gardez le contrôle, nous simplifions le quotidien.</p>
+      <div class="g-feat">
+        <div><div class="g-ico">📅</div><h3>Réservations &amp; accueil</h3><p>Nous gérons les réservations et accueillons vos voyageurs, de leur arrivée jusqu'à leur départ.</p></div>
+        <div><div class="g-ico">🧹</div><h3>Ménage &amp; préparation</h3><p>Ménage et linge entre chaque séjour pour que le logement soit toujours prêt.</p></div>
+        <div><div class="g-ico">📋</div><h3>Contrats &amp; suivi</h3><p>Un suivi clair de vos réservations et de vos revenus, en toute transparence.</p></div>
+      </div>
+      <div class="g-services">
+        <span>🏠 Location immobilière</span><span>🔑 Sous-location</span><span>🏢 Gestion immobilière</span><span>🧹 Ménage</span>
+        <span>🔧 Maintenance &amp; réparations</span><span>🚰 Plomberie</span><span>🌿 Jardinage</span>
+      </div>
+    </div>
+
+    <div class="g-est" id="estimation">
+      <div class="g-est-txt">
+        <div class="kicker">ESTIMATION</div>
+        <h2>Combien votre logement peut-il générer ?</h2>
+        <p>Simulez vos revenus locatifs en quelques secondes et découvrez votre part après notre commission de gestion de <b id="eRate"></b> %.</p>
+      </div>
+      <div class="g-card">
+        <h3>Combien pourriez-vous gagner ?</h3>
+        <div class="g-in">
+          <label>Prix par nuit (DH)<input type="number" id="ePrice" min="0" value="500" oninput="calcRev()"></label>
+          <label>Nuits par mois<input type="number" id="eNights" min="0" max="31" value="15" oninput="syncNights(this.value)"></label>
+        </div>
+        <input type="range" id="eRange" min="0" max="31" value="15" aria-label="Nuits par mois" oninput="syncNights(this.value)">
+        <div class="g-line"><span>Revenu brut</span><b id="eGross">0 DH</b></div>
+        <div class="g-line"><span id="eCommLbl">Commission</span><b id="eComm">- 0 DH</b></div>
+        <div class="g-net"><span id="eNetLbl">Votre revenu</span><b id="eNet">0 DH</b></div>
+        <small>Estimation indicative et non garantie. Le revenu réel varie selon le logement, la saison, le tarif et la demande.</small>
+        <button class="btn primary" style="width:100%;padding:14px;margin-top:12px" onclick="waEstimate()">Recevoir mon estimation personnalisée</button>
+      </div>
+    </div>
   </section>
 
   <!-- FORMULES -->
@@ -213,40 +324,105 @@
   <div class="modal-box">
     <button class="close" onclick="closeM()">✕</button>
     <img id="mImg" src="" alt="">
+    <div class="thumbs" id="mThumbs"></div>
     <div class="modal-body">
       <h3 id="mTitle"></h3>
       <div class="loc" id="mLoc"></div>
+      <div class="chips" id="mMeta" style="margin:-6px 0 10px"></div>
+      <p class="desc" id="mDesc"></p>
+      <div class="chips" id="mEquip"></div>
+
+      <div class="sub">1. Choisissez la formule</div>
       <div class="tabs" id="mTabs"></div>
-      <div class="field">Date<input type="date" id="mDate"></div>
-      <div class="field">Nombre (jours / nuits / créneaux)<input type="number" id="mQty" value="1" min="1"></div>
+
+      <div class="sub">2. Choisissez vos dates</div>
+      <div class="cal">
+        <div class="cal-head">
+          <button id="calPrev" aria-label="Mois précédent" onclick="moveCal(-1)">‹</button>
+          <span id="calTitle"></span>
+          <button aria-label="Mois suivant" onclick="moveCal(1)">›</button>
+        </div>
+        <div class="cal-grid" id="calGrid"></div>
+        <div class="legend">
+          <span><i style="background:#fff;border:1px solid var(--border)"></i>Libre</span>
+          <span><i style="background:#FEE2E2"></i>Occupé</span>
+          <span><i style="background:var(--primary)"></i>Votre choix</span>
+        </div>
+      </div>
+      <div class="field">Nombre (jours / nuits / créneaux)<input type="number" id="mQty" value="1" min="1" max="30"></div>
+      <div id="mRange" style="font-size:14px;color:var(--muted)"></div>
+      <div class="warn" id="mWarn">Ces dates ne sont pas toutes disponibles. Choisissez d'autres jours.</div>
+
       <div class="total"><span>Total</span><span id="mTotal">0 DH</span></div>
-      <button class="btn primary" style="width:100%;padding:15px" onclick="sendWA()">Réserver sur WhatsApp</button>
+      <button class="btn primary" id="mSend" style="width:100%;padding:15px" onclick="sendWA()">Réserver sur WhatsApp</button>
     </div>
   </div>
 </div>
 
+<script src="config.js"></script>
 <script>
 /* ====== CONFIG — modifie ici ====== */
 const WHATSAPP = "212608489738"; // ton numéro sans le +
 
-const studios = [
+/*
+  Par studio :
+   - imgs     : photos supplémentaires (la 1re photo est "img")
+   - desc     : description
+   - equip    : équipements (puces)
+   - capacite : nombre de personnes
+   - busy     : jours OCCUPÉS. "2026-12-01" = un jour, "2026-12-05/2026-12-08" = du 5 au 8 inclus
+  → Pour bloquer un jour : ajoute-le dans "busy", enregistre, puis git push.
+  (Les dates ci-dessous sont des EXEMPLES, remplace-les par tes vraies réservations.)
+*/
+const U = id => `https://images.unsplash.com/${id}?w=800`;
+let studios = [
   { id:1, titre:"Studio cosy France Ville", quartier:"France Ville", cat:"studio",
-    img:"https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=800",
+    img:U("photo-1522708323590-d24dbb6b0267"),
+    imgs:[U("photo-1505691938895-1758d7feb511"), U("photo-1484154218962-a197022b5858")],
+    desc:"Studio chaleureux et calme au cœur de France Ville, idéal pour une pause, un rendez-vous ou une nuit en toute tranquillité.",
+    equip:["📶 Wi-Fi","❄️ Climatisation","🍳 Cuisine équipée","🧺 Linge fourni","📺 TV"],
+    capacite:"2 personnes",
+    busy:["2026-11-24/2026-11-26","2026-12-05","2026-12-12/2026-12-14"],
     prix:{demi:250, jour:400, nuit:500}, badge:"Coup de cœur" },
   { id:2, titre:"Studio moderne Maârif", quartier:"Maârif", cat:"studio",
-    img:"https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=800",
+    img:U("photo-1502672260266-1c1ef2d93688"),
+    imgs:[U("photo-1540518614846-7eded433c457"), U("photo-1556911220-bff31c812dba")],
+    desc:"Studio moderne et lumineux à Maârif, proche des commerces et du tramway.",
+    equip:["📶 Wi-Fi","❄️ Climatisation","🍳 Cuisine équipée","🧺 Linge fourni"],
+    capacite:"2 personnes",
+    busy:["2026-11-20/2026-11-22","2026-12-01/2026-12-03"],
     prix:{demi:300, jour:450, nuit:550} },
   { id:3, titre:"Appartement lumineux Gauthier", quartier:"Gauthier", cat:"appart",
-    img:"https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=800",
+    img:U("photo-1560448204-e02f11c3d0e2"),
+    imgs:[U("photo-1586023492125-27b2c045efd7"), U("photo-1522771739844-6a9f6d5f14af")],
+    desc:"Appartement spacieux et lumineux à Gauthier, parfait pour un séjour confortable en famille ou entre amis.",
+    equip:["📶 Wi-Fi","❄️ Climatisation","🍳 Cuisine équipée","🛏️ 2 chambres","🧺 Linge fourni"],
+    capacite:"4 personnes",
+    busy:["2026-11-28/2026-11-30","2026-12-18/2026-12-20"],
     prix:{jour:600, nuit:750}, badge:"Nouveau" },
-  { id:4, titre:"Studio shooting & réunions", quartier:"Racine", cat:"pro",
-    img:"https://images.unsplash.com/photo-1497366216548-37526070297c?w=800",
+  { id:4, titre:"Studio shooting & réunions", quartier:"Racine", cat:"studio",
+    img:U("photo-1497366216548-37526070297c"),
+    imgs:[U("photo-1556761175-5973dc0f32e7")],
+    desc:"Espace lumineux pour shootings photo/vidéo, réunions et rendez-vous professionnels.",
+    equip:["📶 Wi-Fi fibre","❄️ Climatisation","💡 Lumière naturelle","☕ Café / thé"],
+    capacite:"8 personnes",
+    busy:["2026-11-19","2026-11-25","2026-12-02/2026-12-04"],
     prix:{demi:350, jour:600} },
   { id:5, titre:"Studio calme Bourgogne", quartier:"Bourgogne", cat:"studio",
-    img:"https://images.unsplash.com/photo-1554995207-c18c203602cb?w=800",
+    img:U("photo-1554995207-c18c203602cb"),
+    imgs:[U("photo-1484154218962-a197022b5858"), U("photo-1540518614846-7eded433c457")],
+    desc:"Studio paisible à Bourgogne, résidence sécurisée, idéal pour se reposer.",
+    equip:["📶 Wi-Fi","❄️ Climatisation","🍳 Cuisine équipée","🔒 Résidence sécurisée"],
+    capacite:"2 personnes",
+    busy:["2026-11-22/2026-11-23","2026-12-10/2026-12-11"],
     prix:{demi:220, jour:380, nuit:480} },
   { id:6, titre:"Appartement familial Ain Diab", quartier:"Ain Diab", cat:"appart",
-    img:"https://images.unsplash.com/photo-1493809842364-78817add7ffb?w=800",
+    img:U("photo-1493809842364-78817add7ffb"),
+    imgs:[U("photo-1586023492125-27b2c045efd7"), U("photo-1522771739844-6a9f6d5f14af")],
+    desc:"Grand appartement familial à Ain Diab, à deux pas de la corniche et de la plage.",
+    equip:["📶 Wi-Fi","❄️ Climatisation","🍳 Cuisine équipée","🛏️ 3 chambres","🅿️ Parking"],
+    capacite:"6 personnes",
+    busy:["2026-11-27/2026-11-29","2026-12-24/2026-12-31"],
     prix:{jour:700, nuit:900} },
 ];
 /* ================================== */
@@ -256,7 +432,9 @@ let currentCat = "", current = null, currentFormule = null;
 
 // remplir les quartiers
 const fQ = document.getElementById("fQuartier");
-[...new Set(studios.map(s=>s.quartier))].forEach(q=>fQ.innerHTML+=`<option>${q}</option>`);
+function fillQuartiers(){
+  [...new Set(studios.map(s=>s.quartier))].forEach(q=>fQ.innerHTML+=`<option>${q}</option>`);
+}
 
 function render(){
   const q = fQ.value, f = document.getElementById("fFormule").value;
@@ -278,32 +456,109 @@ function render(){
 }
 
 document.querySelectorAll(".service").forEach(el=>el.onclick=()=>{
+  if(el.id==="svcGestion"){ document.getElementById("gestion").scrollIntoView({behavior:"smooth"}); return; }
   document.querySelectorAll(".service").forEach(x=>x.classList.remove("active"));
   el.classList.add("active"); currentCat = el.dataset.cat; render();
 });
 
 function scrollC(d){ document.getElementById("carousel").scrollBy({left:d*300,behavior:"smooth"}); }
 
+/* ---------- dates (locales, sans décalage horaire) ---------- */
+const pad = n => String(n).padStart(2,"0");
+const ymd = d => `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+const addDays = (s,n) => { const [y,m,d] = s.split("-").map(Number); return ymd(new Date(y,m-1,d+n)); };
+const frDate = s => { const [y,m,d] = s.split("-").map(Number); return new Date(y,m-1,d).toLocaleDateString("fr-FR",{weekday:"short",day:"numeric",month:"long"}); };
+const todayStr = () => ymd(new Date());
+
+// "2026-12-01" = un jour ; "2026-12-05/2026-12-08" = du 5 au 8 inclus
+function busySet(s){
+  const set = new Set();
+  (s.busy||[]).forEach(x=>{
+    const [a,b] = x.split("/"); const end = b||a; let c = a, i = 0;
+    while(c<=end && i<400){ set.add(c); c = addDays(c,1); i++; }
+  });
+  return set;
+}
+
+let busy = new Set(), selDate = "", calMonth = new Date(), galleryList = [];
+const qty = () => Math.max(1, Math.min(30, parseInt(mQty.value)||1));
+const rangeDays = (start,n) => Array.from({length:n},(_,i)=>addDays(start,i));
+const rangeOk = (start,n) => rangeDays(start,n).every(d => d>=todayStr() && !busy.has(d));
+function firstFree(n){
+  let d = todayStr();
+  for(let i=0;i<366;i++,d=addDays(d,1)) if(rangeOk(d,n)) return d;
+  return todayStr();
+}
+
 function openM(id){
   current = studios.find(s=>s.id===id);
   currentFormule = Object.keys(current.prix)[0];
-  mImg.src = current.img; mTitle.textContent = current.titre;
+  busy = busySet(current);
+  mTitle.textContent = current.titre;
   mLoc.textContent = "📍 " + current.quartier + ", Casablanca";
-  mDate.value = new Date().toISOString().slice(0,10);
+  mDesc.textContent = current.desc || "";
+  mMeta.innerHTML = (current.etage ? `<span class="chip">🏢 Étage ${current.etage}</span>` : "")
+    + (current.lat && current.lng ? `<a class="chip" target="_blank" rel="noopener" href="https://www.google.com/maps?q=${current.lat},${current.lng}">🗺️ Voir sur Google Maps</a>` : "");
+  mEquip.innerHTML = (current.equip||[]).map(e=>`<span class="chip">${e}</span>`).join("")
+    + (current.capacite ? `<span class="chip">👥 ${current.capacite}</span>` : "");
+  galleryList = [current.img, ...(current.imgs||[])];
+  drawGallery(0);
   mQty.value = 1;
-  drawTabs(); calc();
+  selDate = firstFree(1);
+  const [y,m] = selDate.split("-").map(Number); calMonth = new Date(y,m-1,1);
+  drawTabs(); update();
   modal.classList.add("open");
 }
 function closeM(){ modal.classList.remove("open"); }
+document.addEventListener("keydown", e=>{ if(e.key==="Escape") closeM(); });
+
+function drawGallery(i){
+  mImg.src = galleryList[i]; mImg.alt = current.titre;
+  mThumbs.innerHTML = galleryList.length>1 ? galleryList.map((u,j)=>
+    `<img src="${u}" class="${j===i?'on':''}" alt="Photo ${j+1}" onclick="drawGallery(${j})" onerror="this.remove()">`).join("") : "";
+}
 function drawTabs(){
   mTabs.innerHTML = Object.entries(current.prix).map(([k,v])=>
-    `<button class="${k===currentFormule?'on':''}" onclick="currentFormule='${k}';drawTabs();calc()">${labels[k]}<br><small>${v} DH</small></button>`).join("");
+    `<button class="${k===currentFormule?'on':''}" onclick="currentFormule='${k}';drawTabs();update()">${labels[k]}<br><small>${v} DH</small></button>`).join("");
 }
-function calc(){ mTotal.textContent = (current.prix[currentFormule] * (+mQty.value||1)) + " DH"; }
-mQty.oninput = calc;
+
+function moveCal(d){
+  calMonth = new Date(calMonth.getFullYear(), calMonth.getMonth()+d, 1);
+  renderCal();
+}
+function pickDay(s){ selDate = s; update(); }
+function renderCal(){
+  const y = calMonth.getFullYear(), m = calMonth.getMonth(), t = todayStr(), n = qty();
+  const sel = new Set(rangeDays(selDate,n));
+  calTitle.textContent = calMonth.toLocaleDateString("fr-FR",{month:"long",year:"numeric"});
+  const now = new Date();
+  calPrev.disabled = (y===now.getFullYear() && m<=now.getMonth()) || y<now.getFullYear();
+  let html = ["L","M","M","J","V","S","D"].map(w=>`<div class="w">${w}</div>`).join("");
+  const offset = (new Date(y,m,1).getDay()+6)%7;
+  html += `<div></div>`.repeat(offset);
+  for(let d=1; d<=new Date(y,m+1,0).getDate(); d++){
+    const s = `${y}-${pad(m+1)}-${pad(d)}`;
+    const cls = s<t ? "past" : busy.has(s) ? "busy" : s===selDate ? "start" : sel.has(s) ? "sel" : "";
+    const off = s<t || busy.has(s);
+    html += `<button class="${cls}" ${off?"disabled":""} onclick="pickDay('${s}')" title="${busy.has(s)?'Occupé':''}">${d}</button>`;
+  }
+  calGrid.innerHTML = html;
+}
+function update(){
+  const n = qty(), ok = rangeOk(selDate,n);
+  mTotal.textContent = (current.prix[currentFormule]*n) + " DH";
+  const end = addDays(selDate,n-1);
+  mRange.textContent = "📅 " + (n>1 ? `Du ${frDate(selDate)} au ${frDate(end)}` : frDate(selDate));
+  mWarn.style.display = ok ? "none" : "block";
+  mSend.disabled = !ok;
+  renderCal();
+}
+mQty.oninput = update;
 
 function sendWA(){
-  const msg = `Bonjour Dar Tafouch 👋\nJe souhaite réserver :\n🏠 ${current.titre}\n⏱️ ${labels[currentFormule]} x${mQty.value}\n📅 ${mDate.value}\n💰 Total : ${mTotal.textContent}`;
+  const n = qty(), end = addDays(selDate,n-1);
+  const when = n>1 ? `du ${frDate(selDate)} au ${frDate(end)}` : frDate(selDate);
+  const msg = `Bonjour Dar Tafouch 👋\nJe souhaite réserver :\n🏠 ${current.titre}\n⏱️ ${labels[currentFormule]} x${n}\n📅 ${when}\n💰 Total : ${mTotal.textContent}`;
   window.open(`https://wa.me/${WHATSAPP}?text=${encodeURIComponent(msg)}`,"_blank");
 }
 function waGeneric(f){
@@ -312,7 +567,52 @@ function waGeneric(f){
   return false;
 }
 
+/* ---------- Simulateur de revenus (gestion) ---------- */
+const COMMISSION = 15; // % de commission Dar Tafouch → MODIFIE ICI ton vrai taux
+const fmt = n => Math.round(n).toLocaleString("fr-FR") + " DH";
+function calcRev(){
+  const p = Math.max(0, +ePrice.value || 0), n = Math.min(31, Math.max(0, +eNights.value || 0));
+  const gross = p*n, comm = gross*COMMISSION/100;
+  eGross.textContent = fmt(gross);
+  eComm.textContent = "- " + fmt(comm);
+  eNet.textContent = fmt(gross - comm);
+}
+function syncNights(v){ v = Math.min(31, Math.max(0, +v || 0)); eNights.value = v; eRange.value = v; calcRev(); }
+function waEstimate(){
+  const msg = `Bonjour Dar Tafouch 👋\nJe souhaite une estimation pour la gestion de mon logement :\n💰 Prix par nuit : ${fmt(+ePrice.value||0)}\n🌙 Nuits par mois : ${eNights.value||0}\n📊 Revenu estimé après commission : ${eNet.textContent}`;
+  window.open(`https://wa.me/${WHATSAPP}?text=${encodeURIComponent(msg)}`,"_blank");
+}
+eRate.textContent = COMMISSION;
+eCommLbl.textContent = `Commission Dar Tafouch ${COMMISSION} %`;
+eNetLbl.textContent = `Votre revenu ${100-COMMISSION} %`;
+calcRev();
+
+/* Charge les studios depuis la base (dashboard). Sans config → on garde la liste ci-dessus. */
+async function loadRemote(){
+  const c = window.DT_CONFIG || {};
+  if(!c.SUPABASE_URL || !c.SUPABASE_ANON_KEY) return;
+  const h = {apikey:c.SUPABASE_ANON_KEY, Authorization:"Bearer "+c.SUPABASE_ANON_KEY};
+  try{
+    const [sr,br] = await Promise.all([
+      fetch(`${c.SUPABASE_URL}/rest/v1/studios_public?select=*&order=id`,{headers:h}),
+      fetch(`${c.SUPABASE_URL}/rest/v1/busy_public?select=*`,{headers:h})]);
+    if(!sr.ok || !br.ok) throw new Error("API "+sr.status+"/"+br.status);
+    const rows = await sr.json(), busyRows = await br.json();
+    studios = rows.map(r=>({
+      id:r.id, titre:r.titre, quartier:r.quartier, cat:r.cat, img:r.img||"", imgs:r.imgs||[],
+      desc:r.description||"", equip:r.equip||[], capacite:r.capacite||"", etage:r.etage,
+      lat:r.lat, lng:r.lng, badge:r.badge,
+      prix:Object.fromEntries([["demi",r.prix_demi],["jour",r.prix_jour],["nuit",r.prix_nuit]].filter(([,v])=>v)),
+      busy:busyRows.filter(b=>b.studio_id===r.id).map(b=>b.date_debut===b.date_fin ? b.date_debut : `${b.date_debut}/${b.date_fin}`)
+    })).filter(s=>Object.keys(s.prix).length);
+    fQ.innerHTML = '<option value="">📍 Tous les quartiers</option>';
+    fillQuartiers(); render();
+  }catch(e){ console.warn("Base indisponible, données locales utilisées :", e); }
+}
+
+fillQuartiers();
 render();
+loadRemote();
 </script>
 </body>
 </html>
