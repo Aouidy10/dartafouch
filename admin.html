@@ -55,6 +55,20 @@
   .msg{font-size:13px;margin-top:8px}.msg.err{color:var(--bad)}.msg.ok{color:var(--ok)}
   #toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--dark);color:#fff;padding:12px 20px;border-radius:999px;font-size:14px;display:none;z-index:200}
   .hide{display:none!important}
+  .tabs{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap}
+  .tab{background:#fff;border:1px solid var(--border);color:var(--text);padding:10px 18px;border-radius:999px;font-weight:700;cursor:pointer;font-family:inherit;font-size:14px}
+  .tab.active{background:var(--dark);color:#fff;border-color:var(--dark)}
+  .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:16px}
+  .card{background:#fff;border:1px solid var(--border);border-radius:var(--radius);padding:16px}
+  .card small{color:var(--muted);font-weight:600;font-size:12px}.card b{display:block;font-size:22px;margin-top:4px}
+  .tbl{overflow-x:auto;background:#fff;border:1px solid var(--border);border-radius:var(--radius)}
+  .tbl table{border-collapse:collapse;width:100%;font-size:13px;min-width:860px}
+  .tbl th,.tbl td{padding:10px 8px;text-align:right;border-bottom:1px solid var(--border);white-space:nowrap}
+  .tbl th:first-child,.tbl td:first-child{text-align:left;position:sticky;left:0;background:#fff;font-weight:700;max-width:170px;overflow:hidden;text-overflow:ellipsis}
+  .tbl th{color:var(--muted);font-size:12px}.tbl td.zero{color:#D6D3D1}
+  .tbl .cur{background:var(--primary-soft)}.tbl tr.tot td{font-weight:800;border-bottom:none}
+  .yr{display:flex;align-items:center;gap:10px;margin-bottom:14px}.yr b{font-size:18px}
+  @media(max-width:640px){.cards{grid-template-columns:1fr}}
   @media(max-width:640px){.grid,.grid3{grid-template-columns:1fr}.item{flex-wrap:wrap}.acts{justify-content:flex-start}}
 </style>
 </head>
@@ -87,8 +101,33 @@
       <button class="btn ghost" onclick="logout()">Déconnexion</button>
     </div>
   </div>
-  <div id="stats" style="color:var(--muted);font-size:14px;margin-bottom:14px"></div>
-  <div class="list" id="list"></div>
+  <div class="tabs">
+    <button class="tab active" id="tabStudios" onclick="showTab('Studios')">🏠 Studios</button>
+    <button class="tab" id="tabRes" onclick="showTab('Res')">📋 Réservations</button>
+    <button class="tab" id="tabRev" onclick="showTab('Rev')">💰 Revenus</button>
+  </div>
+
+  <div id="vStudios">
+    <div id="stats" style="color:var(--muted);font-size:14px;margin-bottom:14px"></div>
+    <div class="list" id="list"></div>
+  </div>
+
+  <div id="vRes" class="hide">
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:14px">
+      <div id="resStats" style="color:var(--muted);font-size:14px"></div>
+      <button class="btn primary" onclick="openRes()">+ Nouvelle réservation</button>
+    </div>
+    <div class="list" id="resList"></div>
+  </div>
+
+  <div id="vRev" class="hide">
+    <div class="yr">
+      <button class="btn ghost" onclick="revYear--;drawRev()">‹</button><b id="revYear"></b><button class="btn ghost" onclick="revYear++;drawRev()">›</button>
+    </div>
+    <div class="cards" id="revCards"></div>
+    <div class="tbl" id="revTbl"></div>
+    <p style="color:var(--muted);font-size:12px;margin-top:10px">Seules les réservations <b>confirmées</b> comptent. Le montant est compté dans le mois de la date d'arrivée.</p>
+  </div>
 </div>
 
 <!-- FORMULAIRE STUDIO -->
@@ -166,6 +205,28 @@
   </div>
 </div>
 
+<!-- RÉSERVATION -->
+<div class="modal" id="rModal" onmousedown="if(event.target===this)closeModals()">
+  <form class="mbox" onsubmit="saveRes(event)">
+    <h2 id="rTitle">Nouvelle réservation</h2>
+    <div class="grid">
+      <label class="full">Studio<select id="rStudio" onchange="autoMontant()"></select></label>
+      <label>Client<input id="rClient" placeholder="Nom du client"></label>
+      <label>Téléphone<input id="rTel" placeholder="06…"></label>
+      <label>Formule<select id="rFormule" onchange="autoMontant()"><option value="demi">Demi-journée</option><option value="jour" selected>Journée</option><option value="nuit">Nuit</option></select></label>
+      <label>Statut<select id="rStatut"><option value="en_attente">En attente</option><option value="confirmee">Confirmée</option><option value="annulee">Annulée</option></select></label>
+      <label>Du / arrivée<input type="date" id="rFrom" onchange="autoMontant()" required></label>
+      <label>Au (inclus) / départ<input type="date" id="rTo" onchange="autoMontant()" required></label>
+      <label class="full">Montant total (DH) <span class="hint">calculé automatiquement, modifiable</span><input type="number" id="rMontant" min="0" required></label>
+    </div>
+    <div class="msg" id="rMsg"></div>
+    <div class="foot">
+      <button type="button" class="btn ghost" onclick="closeModals()">Annuler</button>
+      <button class="btn primary" id="rSave">Enregistrer</button>
+    </div>
+  </form>
+</div>
+
 <div id="toast"></div>
 
 <script src="config.js"></script>
@@ -179,7 +240,7 @@ const fr = s => { const [y,m,d]=s.split("-"); return `${d}/${m}/${y}`; };
 function toast(t){ const e=$("toast"); e.textContent=t; e.style.display="block"; clearTimeout(toast.t); toast.t=setTimeout(()=>e.style.display="none",2600); }
 
 const cfg = window.DT_CONFIG || {};
-let sb = null, studios = [], busy = [], editing = null, photos = [], busyFor = null;
+let sb = null, studios = [], busy = [], reservations = [], resErr = "", editing = null, editingRes = null, photos = [], busyFor = null, revYear = new Date().getFullYear();
 
 if(!cfg.SUPABASE_URL || !cfg.SUPABASE_ANON_KEY){ $("noconfig").classList.remove("hide"); }
 else {
@@ -200,11 +261,14 @@ async function login(e){
 async function logout(){ await sb.auth.signOut(); showLogin(); }
 
 async function refresh(){
-  const [s,b] = await Promise.all([
+  const [s,b,r] = await Promise.all([
     sb.from("studios").select("*").order("id"),
-    sb.from("busy").select("*").order("date_debut")]);
+    sb.from("busy").select("*").order("date_debut"),
+    sb.from("reservations").select("*").order("date_debut",{ascending:false})]);
   if(s.error || b.error){ toast("Erreur de chargement : "+(s.error||b.error).message); return; }
-  studios = s.data; busy = b.data; drawList();
+  studios = s.data; busy = b.data;
+  resErr = r.error ? r.error.message : ""; reservations = r.data || [];
+  drawList(); drawRes(); drawRev();
 }
 
 function statusOf(st){
@@ -250,7 +314,134 @@ function openForm(id){
   $("fFiles").value=""; $("fMsg").textContent=""; drawPhotos();
   $("fModal").classList.add("open");
 }
-function closeModals(){ $("fModal").classList.remove("open"); $("bModal").classList.remove("open"); }
+function closeModals(){ $("fModal").classList.remove("open"); $("bModal").classList.remove("open"); $("rModal").classList.remove("open"); }
+
+/* ---------- réservations & revenus ---------- */
+const MOIS = ["Jan","Fév","Mar","Avr","Mai","Juin","Juil","Août","Sep","Oct","Nov","Déc"];
+const FORM = {demi:"Demi-journée", jour:"Journée", nuit:"Nuit"};
+const dh = n => Math.round(n||0).toLocaleString("fr-FR")+" DH";
+const dayDiff = (a,b) => Math.round((new Date(b)-new Date(a))/864e5);
+
+function showTab(n){
+  for(const k of ["Studios","Res","Rev"]){ $("v"+k).classList.toggle("hide",k!==n); $("tab"+k).classList.toggle("active",k===n); }
+}
+
+function drawRes(){
+  if(resErr){ $("resStats").textContent=""; $("resList").innerHTML = `<div class="box" style="color:var(--bad)">La table « reservations » n'existe pas encore. Lance le SQL « réservations » dans Supabase (SQL Editor).<br><small>${esc(resErr)}</small></div>`; return; }
+  const name = id => (studios.find(s=>s.id===id)||{}).titre || "Studio supprimé";
+  const nb = k => reservations.filter(r=>r.statut===k).length;
+  $("resStats").textContent = `${nb("en_attente")} en attente · ${nb("confirmee")} confirmée(s) · ${nb("annulee")} annulée(s)`;
+  const tags = {en_attente:`<span class="tag" style="background:#FEF3C7;color:#B45309">En attente</span>`, confirmee:`<span class="tag free">Confirmée</span>`, annulee:`<span class="tag busy">Annulée</span>`};
+  $("resList").innerHTML = reservations.length ? reservations.map(r=>`<div class="item">
+      <div class="info">
+        <h3>${esc(name(r.studio_id))} · ${esc(r.client||"Client")}</h3>
+        <div class="sub">📅 ${fr(r.date_debut)} → ${fr(r.date_fin)} · ${FORM[r.formule]}${r.telephone?` · 📞 ${esc(r.telephone)}`:""}</div>
+        <div class="sub"><b>${dh(r.montant)}</b></div>
+        ${tags[r.statut]||""}
+      </div>
+      <div class="acts">
+        ${r.statut!=="confirmee"?`<button class="btn primary" onclick="setStatut(${r.id},'confirmee')">✓ Confirmer</button>`:""}
+        ${r.statut==="en_attente"?`<button class="btn ghost" onclick="setStatut(${r.id},'annulee')">Annuler</button>`:""}
+        ${r.statut==="confirmee"?`<button class="btn ghost" onclick="setStatut(${r.id},'annulee')">Annuler</button>`:""}
+        ${r.statut==="annulee"?`<button class="btn ghost" onclick="setStatut(${r.id},'en_attente')">Remettre en attente</button>`:""}
+        <button class="btn ghost" onclick="openRes(${r.id})">Modifier</button>
+        <button class="btn danger" onclick="delRes(${r.id})">Supprimer</button>
+      </div></div>`).join("")
+    : `<div class="box" style="text-align:center;color:var(--muted)">Aucune réservation. Quand un client te contacte sur WhatsApp, clique sur « + Nouvelle réservation ».</div>`;
+}
+
+async function makeBusy(r){
+  const {data,error} = await sb.from("busy").insert({studio_id:r.studio_id,date_debut:r.date_debut,date_fin:r.date_fin,note:r.client||null}).select("id").single();
+  if(error) throw error; return data.id;
+}
+async function setStatut(id,statut){
+  const r = reservations.find(x=>x.id===id); if(!r) return;
+  try{
+    let busy_id = r.busy_id;
+    if(statut==="confirmee"){
+      const clash = reservations.find(x=>x.id!==id && x.studio_id===r.studio_id && x.statut==="confirmee" && x.date_debut<=r.date_fin && x.date_fin>=r.date_debut);
+      if(clash && !confirm("Ces dates chevauchent une autre réservation confirmée de ce studio. Confirmer quand même ?")) return;
+      if(!busy_id) busy_id = await makeBusy(r);
+    } else if(busy_id){
+      await sb.from("busy").delete().eq("id",busy_id); busy_id = null;
+    }
+    const {error} = await sb.from("reservations").update({statut,busy_id}).eq("id",id);
+    if(error) throw error;
+    toast(statut==="confirmee"?"Réservation confirmée ✓ (dates bloquées sur le site)":statut==="annulee"?"Réservation annulée":"Remise en attente");
+    await refresh();
+  }catch(err){ toast("Erreur : "+(err.message||err)); }
+}
+async function delRes(id){
+  const r = reservations.find(x=>x.id===id);
+  if(!confirm("Supprimer cette réservation ? Elle ne comptera plus dans les revenus.")) return;
+  if(r && r.busy_id) await sb.from("busy").delete().eq("id",r.busy_id);
+  const {error} = await sb.from("reservations").delete().eq("id",id);
+  if(error) return toast("Erreur : "+error.message);
+  toast("Réservation supprimée"); refresh();
+}
+
+function openRes(id){
+  if(!studios.length) return toast("Ajoute d'abord un studio.");
+  editingRes = id ? reservations.find(r=>r.id===id) : null;
+  const r = editingRes || {};
+  $("rTitle").textContent = editingRes ? "Modifier la réservation" : "Nouvelle réservation";
+  $("rStudio").innerHTML = studios.map(s=>`<option value="${s.id}">${esc(s.titre)}</option>`).join("");
+  $("rStudio").value = r.studio_id || studios[0].id;
+  $("rClient").value = r.client||""; $("rTel").value = r.telephone||"";
+  $("rFormule").value = r.formule||"jour"; $("rStatut").value = r.statut||"en_attente";
+  $("rFrom").value = r.date_debut||todayStr(); $("rTo").value = r.date_fin||todayStr();
+  $("rMontant").value = r.montant ?? ""; $("rMsg").textContent="";
+  if(!editingRes) autoMontant();
+  $("rModal").classList.add("open");
+}
+function autoMontant(){
+  const s = studios.find(x=>x.id===+$("rStudio").value); if(!s) return;
+  const a=$("rFrom").value, b=$("rTo").value; if(!a||!b||b<a) return;
+  const f=$("rFormule").value;
+  const unit = f==="demi"?s.prix_demi : f==="nuit"?s.prix_nuit : s.prix_jour;
+  const n = f==="nuit" ? Math.max(1,dayDiff(a,b)) : dayDiff(a,b)+1;
+  if(unit) $("rMontant").value = unit*n;
+}
+async function saveRes(e){
+  e.preventDefault(); const msg=$("rMsg"); msg.className="msg"; msg.textContent="";
+  const row = {studio_id:+$("rStudio").value, client:$("rClient").value.trim()||null, telephone:$("rTel").value.trim()||null,
+    formule:$("rFormule").value, date_debut:$("rFrom").value, date_fin:$("rTo").value,
+    montant:Math.round(+$("rMontant").value||0), statut:$("rStatut").value, busy_id:null};
+  if(row.date_fin<row.date_debut){ msg.className="msg err"; msg.textContent="La date de fin est avant la date de début."; return; }
+  $("rSave").disabled=true; msg.textContent="Enregistrement…";
+  try{
+    if(editingRes && editingRes.busy_id) await sb.from("busy").delete().eq("id",editingRes.busy_id);
+    let id;
+    if(editingRes){ const {error}=await sb.from("reservations").update(row).eq("id",editingRes.id); if(error) throw error; id=editingRes.id; }
+    else { const {data,error}=await sb.from("reservations").insert(row).select("id").single(); if(error) throw error; id=data.id; }
+    if(row.statut==="confirmee"){ const bid=await makeBusy(row); await sb.from("reservations").update({busy_id:bid}).eq("id",id); }
+    closeModals(); toast("Réservation enregistrée ✓"); await refresh();
+  }catch(err){ msg.className="msg err"; msg.textContent="Erreur : "+(err.message||err); }
+  $("rSave").disabled=false;
+}
+
+function drawRev(){
+  $("revYear").textContent = revYear;
+  if(resErr){ $("revCards").innerHTML=""; $("revTbl").innerHTML=`<div class="box" style="color:var(--bad)">Lance d'abord le SQL « réservations » dans Supabase.</div>`; return; }
+  const conf = reservations.filter(r=>r.statut==="confirmee" && +r.date_debut.slice(0,4)===revYear);
+  const rows = studios.map(s=>{
+    const m = Array(12).fill(0);
+    conf.filter(r=>r.studio_id===s.id).forEach(r=>m[+r.date_debut.slice(5,7)-1]+=r.montant);
+    return {s, m, t:m.reduce((a,b)=>a+b,0)};
+  });
+  const tot = Array(12).fill(0); rows.forEach(r=>r.m.forEach((v,i)=>tot[i]+=v));
+  const now = new Date(), cur = now.getFullYear()===revYear ? now.getMonth() : -1;
+  const year = tot.reduce((a,b)=>a+b,0);
+  const pending = reservations.filter(r=>r.statut==="en_attente").reduce((a,r)=>a+r.montant,0);
+  $("revCards").innerHTML = `
+    <div class="card"><small>${cur>=0?`CE MOIS (${MOIS[cur]})`:"CE MOIS"}</small><b>${cur>=0?dh(tot[cur]):"—"}</b></div>
+    <div class="card"><small>TOTAL ${revYear}</small><b>${dh(year)}</b></div>
+    <div class="card"><small>EN ATTENTE (non confirmé)</small><b>${dh(pending)}</b></div>`;
+  const cell = (v,i)=> `<td class="${v?"":"zero"} ${i===cur?"cur":""}">${v?Math.round(v).toLocaleString("fr-FR"):"–"}</td>`;
+  $("revTbl").innerHTML = `<table><thead><tr><th>Studio</th>${MOIS.map((m,i)=>`<th class="${i===cur?"cur":""}">${m}</th>`).join("")}<th>Total</th></tr></thead><tbody>
+    ${rows.map(r=>`<tr><td title="${esc(r.s.titre)}">${esc(r.s.titre)}</td>${r.m.map(cell).join("")}<td><b>${r.t?Math.round(r.t).toLocaleString("fr-FR"):"–"}</b></td></tr>`).join("")}
+    <tr class="tot"><td>Total</td>${tot.map(cell).join("")}<td>${Math.round(year).toLocaleString("fr-FR")}</td></tr></tbody></table>`;
+}
 function drawPhotos(){
   $("fPhotos").innerHTML = photos.map((u,i)=>`<div class="ph"><img src="${esc(u)}" alt="">${i===0?'<span class="main">Principale</span>':""}<button type="button" onclick="rmPhoto(${i})" aria-label="Retirer">✕</button></div>`).join("");
 }
