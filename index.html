@@ -4,7 +4,18 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Dar Tafouch — Studios à Casablanca</title>
-<meta name="description" id="metaDesc" content="Studios et appartements à Casablanca : réservez à la demi-journée, à la journée ou à la nuit."><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<meta name="description" id="metaDesc" content="Studios et appartements à Casablanca : réservez à la demi-journée, à la journée ou à la nuit.">
+<meta name="theme-color" content="#C2410C">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23C2410C'/%3E%3Cpath d='M12 32 32 14l20 18v18H38V38H26v12H12z' fill='%23fff'/%3E%3C/svg%3E">
+<!-- Aperçu quand le lien est partagé (WhatsApp, Facebook, etc.) -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Dar Tafouch">
+<meta property="og:locale" content="fr_FR">
+<meta property="og:title" content="Dar Tafouch — Studios & appartements à Casablanca">
+<meta property="og:description" content="Réservez un studio ou un appartement à Casablanca : demi-journée, journée ou nuit. Réservation simple sur WhatsApp.">
+<meta property="og:url" content="https://www.dartafouch.com/">
+<meta property="og:image" content="https://images.unsplash.com/photo-1540518614846-7eded433c457?w=1200&h=630&fit=crop">
+<meta name="twitter:card" content="summary_large_image"><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
   :root{
     --primary:#C2410C;      /* terracotta */
@@ -167,6 +178,15 @@
 
   /* ---------- PAGES (chaque catégorie a son URL) ---------- */
   .hide{display:none!important}
+  .wa-card{position:absolute;bottom:12px;right:12px;width:40px;height:40px;border-radius:50%;border:none;background:#25D366;color:#fff;font-size:19px;cursor:pointer;display:grid;place-items:center;box-shadow:0 4px 12px rgba(0,0,0,.25)}
+  .wa-card:hover{background:#1EBE5A}
+  .faq{display:grid;gap:10px;max-width:820px}
+  .faq details{border:1px solid var(--border);border-radius:16px;padding:16px 18px;background:#fff}
+  .faq summary{cursor:pointer;font-weight:700;font-size:16px;list-style:none;display:flex;justify-content:space-between;gap:12px;align-items:center}
+  .faq summary::-webkit-details-marker{display:none}
+  .faq summary::after{content:"+";font-size:22px;color:var(--primary);line-height:1}
+  .faq details[open] summary::after{content:"–"}
+  .faq details p{margin-top:10px;color:var(--muted);line-height:1.65;font-size:15px}
   .lead{max-width:600px;margin:-10px auto 24px;color:var(--muted);font-size:16px;line-height:1.6}
   body.grid .carousel{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:22px;overflow:visible}
   body.grid .card{min-width:0;max-width:none}
@@ -315,6 +335,26 @@
         <ul><li>✓ Check-in 15h</li><li>✓ Linge fourni</li><li>✓ Résidence sécurisée</li></ul>
         <a class="btn" href="#" onclick="return waGeneric('nuit')">Réserver</a>
       </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section id="faq">
+    <div class="kicker">QUESTIONS FRÉQUENTES</div>
+    <div class="title-row"><h2>Vous avez une question ?</h2></div>
+    <div class="faq">
+      <details><summary>Comment réserver ?</summary>
+        <p>Choisissez un studio, la formule et vos dates, puis cliquez sur « Réserver sur WhatsApp ». Nous vous répondons pour confirmer la disponibilité et finaliser votre réservation.</p></details>
+      <details><summary>Quelles sont les formules proposées ?</summary>
+        <p>Trois formules : la demi-journée (5h, matin ou après-midi), la journée (de 10h à 20h) et la nuit (check-in à partir de 15h). Les tarifs varient selon le studio ou l'appartement.</p></details>
+      <details><summary>Le ménage et le linge sont-ils inclus ?</summary>
+        <p>Le ménage est inclus avec la formule journée, et le linge est fourni avec la formule nuit. Les studios sont équipés du Wi-Fi et de la climatisation.</p></details>
+      <details><summary>Où se trouvent les logements ?</summary>
+        <p>Tous nos logements sont à Casablanca, dans des résidences sécurisées. L'adresse exacte vous est communiquée après confirmation de votre réservation.</p></details>
+      <details><summary>Paiement et annulation ?</summary>
+        <p>Les conditions de paiement et d'annulation vous sont confirmées sur WhatsApp avant la validation de votre réservation, pour que tout soit clair dès le départ.</p></details>
+      <details><summary>Je suis propriétaire : pouvez-vous gérer mon logement ?</summary>
+        <p>Oui. Nous proposons un service de conciergerie : réservations, accueil des voyageurs, ménage et suivi. <a href="/gestion" style="color:var(--primary);font-weight:700">Découvrir la gestion</a>.</p></details>
     </div>
   </section>
 </div>
@@ -466,6 +506,7 @@ function render(){
         <img src="${s.img}" alt="${s.titre}" loading="lazy">
         ${s.badge?`<span class="badge">${s.badge}</span>`:""}
         <button class="fav" onclick="event.stopPropagation();this.textContent=this.textContent==='♡'?'❤️':'♡'">♡</button>
+        <button class="wa-card" title="Écrire sur WhatsApp" aria-label="Écrire sur WhatsApp" onclick="event.stopPropagation();waStudio(${s.id})">💬</button>
       </div>
       <h3>${s.titre}</h3>
       <div class="loc">📍 ${s.quartier}, Casablanca</div>
@@ -507,10 +548,10 @@ currentCat = PG.cat || "";
   document.querySelectorAll(".service").forEach(a=>a.classList.toggle("active", a.dataset.page===PAGE_KEY));
   document.body.classList.toggle("grid", !!PG.grid);
   if(PG.gestion){
-    show("searchBox",false); show("secList",false); show("formules",false); show("gestion",true); show("secPromo",false);
+    show("searchBox",false); show("secList",false); show("formules",false); show("gestion",true); show("secPromo",false); show("faq",false);
     $i("hdrBtn").href = "#estimation"; $i("hdrBtn").textContent = "Estimer mes revenus";
   } else {
-    show("gestion",false); show("secPromo",PAGE_KEY==="");
+    show("gestion",false); show("secPromo",PAGE_KEY===""); show("faq",true);
     $i("secKicker").textContent = PG.kicker; $i("secTitle").textContent = PG.sec;
   }
 })();
@@ -613,6 +654,11 @@ function sendWA(){
   const n = qty(), end = addDays(selDate,n-1);
   const when = n>1 ? `du ${frDate(selDate)} au ${frDate(end)}` : frDate(selDate);
   const msg = `Bonjour Dar Tafouch 👋\nJe souhaite réserver :\n🏠 ${current.titre}\n⏱️ ${labels[currentFormule]} x${n}\n📅 ${when}\n💰 Total : ${mTotal.textContent}`;
+  window.open(`https://wa.me/${WHATSAPP}?text=${encodeURIComponent(msg)}`,"_blank");
+}
+function waStudio(id){
+  const s = studios.find(x=>x.id===id); if(!s) return;
+  const msg = `Bonjour Dar Tafouch 👋\nJe suis intéressé(e) par :\n🏠 ${s.titre}\n📍 ${s.quartier}\nEst-il disponible ? Merci !`;
   window.open(`https://wa.me/${WHATSAPP}?text=${encodeURIComponent(msg)}`,"_blank");
 }
 function waGeneric(f){
