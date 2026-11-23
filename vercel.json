@@ -1,10 +1,4 @@
 {
-  "rewrites": [
-    { "source": "/studios", "destination": "/index.html" },
-    { "source": "/studios/", "destination": "/index.html" },
-    { "source": "/appartements", "destination": "/index.html" },
-    { "source": "/appartements/", "destination": "/index.html" },
-    { "source": "/gestion", "destination": "/index.html" },
-    { "source": "/gestion/", "destination": "/index.html" }
-  ]
+  "cleanUrls": true,
+  "trailingSlash": false
 }
