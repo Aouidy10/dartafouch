@@ -4,7 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Dar Tafouch — Studios à Casablanca</title>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<meta name="description" id="metaDesc" content="Studios et appartements à Casablanca : réservez à la demi-journée, à la journée ou à la nuit."><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
   :root{
     --primary:#C2410C;      /* terracotta */
@@ -165,6 +165,15 @@
     .g-est{padding:22px}
   }
 
+  /* ---------- PAGES (chaque catégorie a son URL) ---------- */
+  .hide{display:none!important}
+  .lead{max-width:600px;margin:-10px auto 24px;color:var(--muted);font-size:16px;line-height:1.6}
+  body.grid .carousel{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:22px;overflow:visible}
+  body.grid .card{min-width:0;max-width:none}
+  body.grid .arrows{display:none}
+  .promo{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;background:var(--primary-soft);border-radius:var(--radius);padding:26px}
+  .promo h3{font-size:20px;letter-spacing:-.3px}.promo p{color:var(--muted);margin-top:4px}
+
   @media(max-width:760px){
     .services{grid-template-columns:repeat(2,1fr)}
     .plans{grid-template-columns:1fr}
@@ -179,16 +188,17 @@
 <body>
 
 <header>
-  <a class="logo" href="#" aria-label="Dar Tafouch"><img src="logo.png" alt="Dar Tafouch" onerror="this.parentNode.innerHTML='Dar<span>Tafouch</span>'"></a>
-  <a class="btn" href="#formules">Réserver</a>
+  <a class="logo" href="/" aria-label="Dar Tafouch"><img src="/logo.png" alt="Dar Tafouch" onerror="this.parentNode.innerHTML='Dar<span>Tafouch</span>'"></a>
+  <a class="btn" id="hdrBtn" href="#formules">Réserver</a>
 </header>
 
 <!-- HERO -->
 <div class="hero">
-  <div class="tagline">STUDIOS · JOURNÉE · DEMI-JOURNÉE · NUIT</div>
-  <h1>Votre studio à Casablanca,<br>quand vous voulez.</h1>
+  <div class="tagline" id="pgTag">STUDIOS · JOURNÉE · DEMI-JOURNÉE · NUIT</div>
+  <h1 id="pgH1">Votre studio à Casablanca,<br>quand vous voulez.</h1>
+  <p class="lead hide" id="pgLead"></p>
 
-  <div class="search">
+  <div class="search" id="searchBox">
     <select id="fQuartier">
       <option value="">📍 Tous les quartiers</option>
     </select>
@@ -203,26 +213,34 @@
   </div>
 
   <div class="services" id="services">
-    <div class="service active" data-cat=""><div class="ico">🏠</div><p>Tous</p></div>
-    <div class="service" data-cat="studio"><div class="ico">🛋️</div><p>Studios</p></div>
-    <div class="service" data-cat="appart"><div class="ico">🏢</div><p>Appartements</p></div>
-    <div class="service" id="svcGestion"><div class="ico">🔑</div><p>Gestion</p></div>
+    <a class="service" href="/" data-page=""><div class="ico">🏠</div><p>Tous</p></a>
+    <a class="service" href="/studios" data-page="studios"><div class="ico">🛋️</div><p>Studios</p></a>
+    <a class="service" href="/appartements" data-page="appartements"><div class="ico">🏢</div><p>Appartements</p></a>
+    <a class="service" href="/gestion" data-page="gestion"><div class="ico">🔑</div><p>Gestion</p></a>
   </div>
 </div>
 
 <div class="container">
 
   <!-- LIEUX -->
-  <section>
-    <div class="kicker">DÉCOUVREZ</div>
+  <section id="secList">
+    <div class="kicker" id="secKicker">DÉCOUVREZ</div>
     <div class="title-row">
-      <h2>Nos studios disponibles</h2>
+      <h2 id="secTitle">Nos studios disponibles</h2>
       <div class="arrows">
         <button onclick="scrollC(-1)">‹</button>
         <button onclick="scrollC(1)">›</button>
       </div>
     </div>
     <div class="carousel" id="carousel"></div>
+  </section>
+
+  <!-- TEASER GESTION (page d'accueil seulement) -->
+  <section id="secPromo" class="hide">
+    <div class="promo">
+      <div><h3>Vous avez un logement à Casablanca ?</h3><p>Confiez-nous sa gestion : réservations, accueil, ménage et suivi.</p></div>
+      <a class="btn primary" href="/gestion">Découvrir la gestion</a>
+    </div>
   </section>
 
   <!-- GESTION / CONCIERGERIE -->
@@ -313,7 +331,7 @@
 
 <!-- NAV BAS -->
 <nav class="bottom-nav">
-  <a href="#" class="active">🏠</a>
+  <a href="/" class="active">🏠</a>
   <a href="#formules">📅</a>
   <a href="#" onclick="document.getElementById('fQuartier').focus();return false">🔍</a>
   <a href="#" onclick="return waGeneric('')">💬</a>
@@ -359,7 +377,7 @@
   </div>
 </div>
 
-<script src="config.js"></script>
+<script src="/config.js"></script>
 <script>
 /* ====== CONFIG — modifie ici ====== */
 const WHATSAPP = "212608489738"; // ton numéro sans le +
@@ -455,11 +473,47 @@ function render(){
     </div>`}).join("") : `<p style="color:var(--muted)">Aucun studio ne correspond à votre recherche.</p>`;
 }
 
-document.querySelectorAll(".service").forEach(el=>el.onclick=()=>{
-  if(el.id==="svcGestion"){ document.getElementById("gestion").scrollIntoView({behavior:"smooth"}); return; }
-  document.querySelectorAll(".service").forEach(x=>x.classList.remove("active"));
-  el.classList.add("active"); currentCat = el.dataset.cat; render();
-});
+/* ---------- Pages : chaque catégorie a son URL (/studios, /appartements, /gestion) ---------- */
+const PAGES = {
+  "": { cat:"", title:"Dar Tafouch — Studios à Casablanca",
+        desc:"Studios et appartements à Casablanca : réservez à la demi-journée, à la journée ou à la nuit.",
+        tag:"STUDIOS · JOURNÉE · DEMI-JOURNÉE · NUIT", h1:"Votre studio à Casablanca,<br>quand vous voulez.",
+        kicker:"DÉCOUVREZ", sec:"Nos studios disponibles" },
+  studios: { cat:"studio", grid:true, title:"Studios à louer à Casablanca — Dar Tafouch",
+        desc:"Louez un studio à Casablanca à la demi-journée, à la journée ou à la nuit : shooting, rendez-vous pro, escapade.",
+        tag:"STUDIOS À CASABLANCA", h1:"Nos studios,<br>à la journée ou à la nuit.",
+        lead:"Des studios équipés et lumineux, réservables à la demi-journée, à la journée ou à la nuit.",
+        kicker:"STUDIOS", sec:"Tous nos studios" },
+  appartements: { cat:"appart", grid:true, title:"Appartements à louer à Casablanca — Dar Tafouch",
+        desc:"Appartements meublés à Casablanca pour vos séjours courts : familles, groupes, déplacements professionnels.",
+        tag:"APPARTEMENTS À CASABLANCA", h1:"Nos appartements,<br>pour des séjours confortables.",
+        lead:"Plus d'espace pour les familles, les groupes et les séjours plus longs.",
+        kicker:"APPARTEMENTS", sec:"Tous nos appartements" },
+  gestion: { gestion:true, title:"Gestion Airbnb & Conciergerie à Casablanca — Dar Tafouch",
+        desc:"Conciergerie et gestion locative à Casablanca : réservations, accueil des voyageurs, ménage et suivi de votre logement.",
+        tag:"CONCIERGERIE & GESTION LOCATIVE", h1:"Confiez-nous votre logement,<br>nous nous occupons du reste.",
+        lead:"Gestion Airbnb, accueil des voyageurs, ménage et suivi : vous gardez le contrôle, nous simplifions le quotidien." }
+};
+const slug = location.pathname.replace(/^\/+|\/+$/g,"").replace(/\.html$/,"").toLowerCase();
+const PAGE_KEY = (slug in PAGES && slug!=="index") ? slug : "";
+const PG = PAGES[PAGE_KEY];
+currentCat = PG.cat || "";
+
+(function setupPage(){
+  const $i = id => document.getElementById(id), show = (id,on) => $i(id).classList.toggle("hide",!on);
+  document.title = PG.title; $i("metaDesc").content = PG.desc;
+  $i("pgTag").textContent = PG.tag; $i("pgH1").innerHTML = PG.h1;
+  if(PG.lead){ $i("pgLead").textContent = PG.lead; show("pgLead",true); }
+  document.querySelectorAll(".service").forEach(a=>a.classList.toggle("active", a.dataset.page===PAGE_KEY));
+  document.body.classList.toggle("grid", !!PG.grid);
+  if(PG.gestion){
+    show("searchBox",false); show("secList",false); show("formules",false); show("gestion",true); show("secPromo",false);
+    $i("hdrBtn").href = "#estimation"; $i("hdrBtn").textContent = "Estimer mes revenus";
+  } else {
+    show("gestion",false); show("secPromo",PAGE_KEY==="");
+    $i("secKicker").textContent = PG.kicker; $i("secTitle").textContent = PG.sec;
+  }
+})();
 
 function scrollC(d){ document.getElementById("carousel").scrollBy({left:d*300,behavior:"smooth"}); }
 
