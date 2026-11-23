@@ -105,6 +105,7 @@
     <button class="tab active" id="tabStudios" onclick="showTab('Studios')">🏠 Studios</button>
     <button class="tab" id="tabRes" onclick="showTab('Res')">📋 Réservations</button>
     <button class="tab" id="tabRev" onclick="showTab('Rev')">💰 Revenus</button>
+    <button class="tab" id="tabAvis" onclick="showTab('Avis')">⭐ Avis</button>
   </div>
 
   <div id="vStudios">
@@ -118,6 +119,11 @@
       <button class="btn primary" onclick="openRes()">+ Nouvelle réservation</button>
     </div>
     <div class="list" id="resList"></div>
+  </div>
+
+  <div id="vAvis" class="hide">
+    <div id="avisStats" style="color:var(--muted);font-size:14px;margin-bottom:14px"></div>
+    <div class="list" id="avisList"></div>
   </div>
 
   <div id="vRev" class="hide">
@@ -240,7 +246,7 @@ const fr = s => { const [y,m,d]=s.split("-"); return `${d}/${m}/${y}`; };
 function toast(t){ const e=$("toast"); e.textContent=t; e.style.display="block"; clearTimeout(toast.t); toast.t=setTimeout(()=>e.style.display="none",2600); }
 
 const cfg = window.DT_CONFIG || {};
-let sb = null, studios = [], busy = [], reservations = [], resErr = "", editing = null, editingRes = null, photos = [], busyFor = null, revYear = new Date().getFullYear();
+let sb = null, studios = [], busy = [], reservations = [], resErr = "", avisRows = [], avisErr = "", editing = null, editingRes = null, photos = [], busyFor = null, revYear = new Date().getFullYear();
 
 if(!cfg.SUPABASE_URL || !cfg.SUPABASE_ANON_KEY){ $("noconfig").classList.remove("hide"); }
 else {
@@ -261,14 +267,16 @@ async function login(e){
 async function logout(){ await sb.auth.signOut(); showLogin(); }
 
 async function refresh(){
-  const [s,b,r] = await Promise.all([
+  const [s,b,r,a] = await Promise.all([
     sb.from("studios").select("*").order("id"),
     sb.from("busy").select("*").order("date_debut"),
-    sb.from("reservations").select("*").order("date_debut",{ascending:false})]);
+    sb.from("reservations").select("*").order("date_debut",{ascending:false}),
+    sb.from("avis").select("*, studios(titre)").order("created_at",{ascending:false})]);
   if(s.error || b.error){ toast("Erreur de chargement : "+(s.error||b.error).message); return; }
   studios = s.data; busy = b.data;
   resErr = r.error ? r.error.message : ""; reservations = r.data || [];
-  drawList(); drawRes(); drawRev();
+  avisErr = a.error ? a.error.message : ""; avisRows = a.data || [];
+  drawList(); drawRes(); drawRev(); drawAvis();
 }
 
 function statusOf(st){
@@ -323,7 +331,40 @@ const dh = n => Math.round(n||0).toLocaleString("fr-FR")+" DH";
 const dayDiff = (a,b) => Math.round((new Date(b)-new Date(a))/864e5);
 
 function showTab(n){
-  for(const k of ["Studios","Res","Rev"]){ $("v"+k).classList.toggle("hide",k!==n); $("tab"+k).classList.toggle("active",k===n); }
+  for(const k of ["Studios","Res","Rev","Avis"]){ $("v"+k).classList.toggle("hide",k!==n); $("tab"+k).classList.toggle("active",k===n); }
+}
+
+/* ---------- avis clients ---------- */
+function drawAvis(){
+  const pend = avisRows.filter(a=>a.statut==="en_attente").length;
+  $("tabAvis").textContent = "⭐ Avis" + (pend ? ` (${pend})` : "");
+  if(avisErr){ $("avisStats").textContent=""; $("avisList").innerHTML = `<div class="box" style="color:var(--bad)">La table « avis » n'existe pas encore. Lance le SQL « avis » dans Supabase (SQL Editor).<br><small>${esc(avisErr)}</small></div>`; return; }
+  $("avisStats").textContent = `${pend} en attente · ${avisRows.filter(a=>a.statut==="approuve").length} publié(s) · ${avisRows.filter(a=>a.statut==="masque").length} masqué(s)`;
+  const tags = {en_attente:`<span class="tag" style="background:#FEF3C7;color:#B45309">À valider</span>`, approuve:`<span class="tag free">Publié</span>`, masque:`<span class="tag off">Masqué</span>`};
+  $("avisList").innerHTML = avisRows.length ? avisRows.map(a=>`<div class="item" style="align-items:flex-start">
+      <div class="info">
+        <h3 style="white-space:normal">${esc(a.nom)} · <span style="color:#F59E0B">${"★".repeat(a.note)}${"☆".repeat(5-a.note)}</span></h3>
+        <div class="sub">${a.studios?esc(a.studios.titre)+" · ":""}${new Date(a.created_at).toLocaleDateString("fr-FR")}</div>
+        <div class="sub" style="color:var(--text);margin:6px 0;white-space:pre-wrap">${esc(a.commentaire)}</div>
+        ${tags[a.statut]||""}
+      </div>
+      <div class="acts">
+        ${a.statut!=="approuve"?`<button class="btn primary" onclick="setAvis(${a.id},'approuve')">✓ Publier</button>`:""}
+        ${a.statut!=="masque"?`<button class="btn ghost" onclick="setAvis(${a.id},'masque')">Masquer</button>`:""}
+        <button class="btn danger" onclick="delAvis(${a.id})">Supprimer</button>
+      </div></div>`).join("")
+    : `<div class="box" style="text-align:center;color:var(--muted)">Aucun avis pour le moment.</div>`;
+}
+async function setAvis(id,statut){
+  const {error} = await sb.from("avis").update({statut}).eq("id",id);
+  if(error) return toast("Erreur : "+error.message);
+  toast(statut==="approuve"?"Avis publié sur le site ✓":"Avis masqué"); refresh();
+}
+async function delAvis(id){
+  if(!confirm("Supprimer définitivement cet avis ?")) return;
+  const {error} = await sb.from("avis").delete().eq("id",id);
+  if(error) return toast("Erreur : "+error.message);
+  toast("Avis supprimé"); refresh();
 }
 
 function drawRes(){
